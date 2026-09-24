@@ -40,7 +40,7 @@ export default function SellPage() {
     formState: { errors, isSubmitting },
     watch,
   } = useForm<SellForm>({
-    resolver: zodResolver(sellSchema),
+    resolver: zodResolver(sellSchema) as any,
     defaultValues: { condition: "GOOD", image: "" },
   });
 

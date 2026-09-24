@@ -20,7 +20,7 @@ interface Product {
   category: { name: string; icon: string };
 }
 
-const STATUS_ICONS: Record<string, JSX.Element> = {
+const STATUS_ICONS: Record<string, React.ReactNode> = {
   PENDING: <Clock size={13} className="text-amber-400" />,
   APPROVED: <CheckCircle size={13} className="text-emerald-400" />,
   REJECTED: <XCircle size={13} className="text-red-400" />,

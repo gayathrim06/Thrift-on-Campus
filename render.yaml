@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: thrift-on-campus
+    runtime: node
+    plan: free
+    buildCommand: npm install && npx prisma db push && npm run db:seed && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DATABASE_URL
+        value: "file:./dev.db"
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: AUTH_SECRET
+        fromEnvVar: NEXTAUTH_SECRET

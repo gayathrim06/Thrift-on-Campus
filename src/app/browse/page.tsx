@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal, X, ChevronDown, Sparkles, RefreshCw } from "lucide-react";
@@ -36,7 +36,7 @@ const CATEGORIES = [
   { name: "Miscellaneous", icon: "📦" },
 ];
 
-export default function BrowsePage() {
+function BrowseContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -320,5 +320,13 @@ export default function BrowsePage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function BrowsePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen pt-24 text-center text-slate-400">Loading campus finds...</div>}>
+      <BrowseContent />
+    </Suspense>
   );
 }
