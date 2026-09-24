@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: thrift-on-campus
+    name: thrift-in-campus
     runtime: node
     plan: free
     buildCommand: npm install && npx prisma db push && npm run db:seed && npm run build
@@ -14,3 +14,5 @@ services:
         generateValue: true
       - key: AUTH_SECRET
         fromEnvVar: NEXTAUTH_SECRET
+      - key: NEXTAUTH_URL
+        value: "https://thrift-in-campus.onrender.com"
