@@ -13,6 +13,6 @@ services:
       - key: NEXTAUTH_SECRET
         generateValue: true
       - key: AUTH_SECRET
-        fromEnvVar: NEXTAUTH_SECRET
+        generateValue: true
       - key: NEXTAUTH_URL
         value: "https://thrift-in-campus.onrender.com"
