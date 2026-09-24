@@ -1,0 +1,54 @@
+// Prisma schema — SQLite (no enums, use String)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Role: "STUDENT" | "ADMIN"
+// ProductStatus: "PENDING" | "APPROVED" | "REJECTED" | "SOLD"
+// Condition: "EXCELLENT" | "GOOD" | "FAIR" | "POOR"
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("STUDENT")
+  createdAt    DateTime  @default(now())
+  products     Product[]
+
+  @@index([email])
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  icon     String    @default("📦")
+  products Product[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  sellerId    String
+  name        String
+  description String
+  categoryId  String
+  price       Float
+  image       String
+  condition   String   @default("GOOD")
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  seller   User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@index([status])
+  @@index([categoryId])
+  @@index([sellerId])
+  @@index([createdAt])
+}
