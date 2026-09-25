@@ -35,7 +35,7 @@ async function main() {
 
   const admin = await prisma.user.upsert({
     where: { email: "admin@campus.edu" },
-    update: {},
+    update: { passwordHash: adminHash, role: "ADMIN" },
     create: {
       name: "Admin",
       email: "admin@campus.edu",
@@ -45,11 +45,11 @@ async function main() {
   });
 
   const students = await Promise.all([
-    prisma.user.upsert({ where: { email: "student@campus.edu" }, update: {}, create: { name: "Demo Student", email: "student@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
-    prisma.user.upsert({ where: { email: "arjun@campus.edu" }, update: {}, create: { name: "Arjun Sharma", email: "arjun@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
-    prisma.user.upsert({ where: { email: "priya@campus.edu" }, update: {}, create: { name: "Priya Patel", email: "priya@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
-    prisma.user.upsert({ where: { email: "rahul@campus.edu" }, update: {}, create: { name: "Rahul Verma", email: "rahul@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
-    prisma.user.upsert({ where: { email: "sneha@campus.edu" }, update: {}, create: { name: "Sneha Gupta", email: "sneha@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
+    prisma.user.upsert({ where: { email: "student@campus.edu" }, update: { passwordHash: studentHash, role: "STUDENT" }, create: { name: "Demo Student", email: "student@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
+    prisma.user.upsert({ where: { email: "arjun@campus.edu" }, update: { passwordHash: studentHash, role: "STUDENT" }, create: { name: "Arjun Sharma", email: "arjun@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
+    prisma.user.upsert({ where: { email: "priya@campus.edu" }, update: { passwordHash: studentHash, role: "STUDENT" }, create: { name: "Priya Patel", email: "priya@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
+    prisma.user.upsert({ where: { email: "rahul@campus.edu" }, update: { passwordHash: studentHash, role: "STUDENT" }, create: { name: "Rahul Verma", email: "rahul@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
+    prisma.user.upsert({ where: { email: "sneha@campus.edu" }, update: { passwordHash: studentHash, role: "STUDENT" }, create: { name: "Sneha Gupta", email: "sneha@campus.edu", passwordHash: studentHash, role: "STUDENT" } }),
   ]);
   console.log("✅ Users created");
 

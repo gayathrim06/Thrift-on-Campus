@@ -128,12 +128,33 @@ function LoginContent() {
         </div>
 
         {/* Demo credentials */}
-        <div className="mt-5 glass rounded-xl p-4 border border-white/5">
-          <p className="text-xs text-white/30 font-medium uppercase tracking-wide mb-2">Demo Accounts</p>
-          <div className="space-y-1.5 text-xs text-white/40">
-            <p><span className="text-white/60">Admin:</span> admin@campus.edu / admin123</p>
-            <p><span className="text-white/60">Student:</span> student@campus.edu / student123</p>
+        <div className="mt-5 glass rounded-xl p-4 border border-white/8">
+          <p className="text-xs text-white/40 font-medium uppercase tracking-wide mb-2.5">Quick 1-Click Demo Fill</p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setEmail("student@campus.edu");
+                setPassword("student123");
+              }}
+              className="px-3 py-2 text-xs font-medium rounded-lg glass hover:bg-sky-500/15 text-sky-300 border border-sky-500/30 text-center transition-all active:scale-95 cursor-pointer"
+            >
+              🎓 Student Demo
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail("admin@campus.edu");
+                setPassword("admin123");
+              }}
+              className="px-3 py-2 text-xs font-medium rounded-lg glass hover:bg-violet-500/15 text-violet-300 border border-violet-500/30 text-center transition-all active:scale-95 cursor-pointer"
+            >
+              🛡️ Admin Demo
+            </button>
           </div>
+          <p className="mt-2 text-[11px] text-white/30 text-center">
+            Clicking auto-fills email and password
+          </p>
         </div>
       </motion.div>
     </div>
