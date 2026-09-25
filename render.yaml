@@ -3,6 +3,7 @@ services:
     name: thrift-in-campus
     runtime: node
     plan: free
+    autoDeployTrigger: commit
     buildCommand: npm install && npx prisma db push && npm run db:seed && npm run build
     startCommand: npm start
     envVars:
