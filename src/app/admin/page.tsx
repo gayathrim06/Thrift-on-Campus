@@ -46,8 +46,13 @@ export default function AdminPage() {
   const [view, setView] = useState<"dashboard" | "pending">("dashboard");
 
   useEffect(() => {
-    if (status === "unauthenticated" || ((session?.user as any)?.role !== "ADMIN")) {
-      if (status !== "loading") router.push("/");
+    if (status === "loading") return;
+    if (status === "unauthenticated") {
+      router.push("/login?callbackUrl=/admin");
+      return;
+    }
+    if ((session?.user as any)?.role !== "ADMIN") {
+      router.push("/");
       return;
     }
     loadData();

@@ -7,16 +7,42 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Upload, CheckCircle, Loader2, X } from "lucide-react";
+import { Upload, CheckCircle, Loader2, ImageIcon } from "lucide-react";
 import { toast } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+
+/**
+ * Converts any Unsplash page URL to a direct CDN image URL.
+ * Handles both:
+ *   https://unsplash.com/photos/slug-PHOTO_ID  → https://images.unsplash.com/photo-PHOTO_ID?w=800&q=80
+ *   https://images.unsplash.com/...             → unchanged (already direct)
+ *   anything else                               → unchanged
+ */
+function resolveImageUrl(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return trimmed;
+
+  // Already a direct Unsplash CDN URL
+  if (trimmed.startsWith("https://images.unsplash.com/")) return trimmed;
+
+  // Unsplash page URL: extract photo ID (last hyphen-separated segment)
+  const unsplashPageMatch = trimmed.match(
+    /https:\/\/unsplash\.com\/photos\/[^/?#]*-([A-Za-z0-9_-]+)(?:[/?#]|$)/
+  );
+  if (unsplashPageMatch) {
+    return `https://images.unsplash.com/photo-${unsplashPageMatch[1]}?w=800&q=80`;
+  }
+
+  return trimmed;
+}
 
 const sellSchema = z.object({
   name: z.string().min(2, "Name too short").max(100),
   description: z.string().min(10, "Description too short").max(2000),
   categoryId: z.string().min(1, "Select a category"),
   price: z.coerce.number().positive("Price must be positive"),
-  image: z.string().url("Enter a valid image URL").or(z.literal("")),
+  // Accept any non-empty string (page URLs are resolved server-side)
+  image: z.string().optional().default(""),
   condition: z.enum(["EXCELLENT", "GOOD", "FAIR", "POOR"]),
 });
 
@@ -33,16 +59,21 @@ export default function SellPage() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
+    setValue,
   } = useForm<SellForm>({
     resolver: zodResolver(sellSchema) as any,
     defaultValues: { condition: "GOOD", image: "" },
   });
+
+  const rawImageValue = watch("image") || "";
+  const resolvedPreview = resolveImageUrl(rawImageValue);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -55,7 +86,8 @@ export default function SellPage() {
 
   const onSubmit = async (data: SellForm) => {
     try {
-      const imageUrl = data.image || 
+      // Resolve page URLs → direct CDN URLs before submitting
+      const imageUrl = resolveImageUrl(data.image || "") ||
         "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80";
       
       const res = await fetch("/api/products/create", {
@@ -268,21 +300,52 @@ export default function SellPage() {
                 {/* Image URL */}
                 <div>
                   <label className="block text-sm font-medium text-white/70 mb-2">
-                    Image URL{" "}
-                    <span className="text-white/30 font-normal">(optional — paste an Unsplash link)</span>
+                    Product Image{" "}
+                    <span className="text-white/30 font-normal">(optional)</span>
                   </label>
+
                   <input
                     {...register("image")}
-                    placeholder="https://images.unsplash.com/..."
+                    placeholder="Paste any image URL or Unsplash page link..."
+                    onChange={(e) => {
+                      register("image").onChange(e);
+                      setImgError(false);
+                    }}
                     className="w-full px-4 py-3 glass rounded-xl text-white placeholder:text-white/25 focus:outline-none border border-white/5 focus:border-violet-500/50 transition-colors text-sm"
                   />
-                  {errors.image && (
-                    <p className="mt-1.5 text-xs text-red-400">{errors.image.message}</p>
-                  )}
-                  <p className="mt-2 text-xs text-white/25 flex items-center gap-1.5">
-                    <Upload size={11} />
-                    A placeholder image will be used if you don't provide one.
-                  </p>
+
+                  {/* Live preview */}
+                  {resolvedPreview && !imgError ? (
+                    <div className="mt-3 relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={resolvedPreview}
+                        alt="Preview"
+                        onError={() => setImgError(true)}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-2 right-2 bg-emerald-500/80 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        ✓ Image loaded
+                      </div>
+                    </div>
+                  ) : resolvedPreview && imgError ? (
+                    <p className="mt-2 text-xs text-red-400 flex items-center gap-1.5">
+                      <span>⚠</span> Couldn't load this image. Try a different URL.
+                    </p>
+                  ) : null}
+
+                  <div className="mt-2 space-y-1">
+                    <p className="text-xs text-white/30 flex items-center gap-1.5">
+                      <Upload size={11} />
+                      Paste the Unsplash page link directly — it works automatically.
+                    </p>
+                    <p className="text-xs text-white/20">
+                      Or right-click any image online → "Copy image address" → paste here.
+                    </p>
+                    <p className="text-xs text-white/20">
+                      Leave blank to use a default placeholder.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Submit */}

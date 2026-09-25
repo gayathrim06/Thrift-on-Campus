@@ -43,16 +43,14 @@ export default function ProductCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 24,
-        delay: Math.min(index * 0.04, 0.3),
+        duration: 0.3,
+        delay: Math.min(index * 0.04, 0.24),
+        ease: "easeOut",
       }}
-      whileHover={{ y: -6, transition: { duration: 0.2 } }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: 0.97 }}
       className="h-full"
     >
       <Link href={`/products/${product.id}`} className="block group h-full">
@@ -63,7 +61,8 @@ export default function ProductCard({
               src={product.image}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+              loading="lazy"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
 
@@ -73,7 +72,7 @@ export default function ProductCard({
             {/* Condition badge */}
             <div className="absolute top-2.5 left-2.5 z-10">
               <span
-                className={`text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full backdrop-blur-md shadow-sm border border-white/10 ${getConditionColor(product.condition)}`}
+                className={`text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow-sm border border-white/10 ${getConditionColor(product.condition)}`}
               >
                 {product.condition.charAt(0) + product.condition.slice(1).toLowerCase()}
               </span>

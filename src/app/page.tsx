@@ -61,23 +61,13 @@ export default function HomePage() {
     <div className="pb-24 md:pb-12 overflow-x-hidden">
       {/* ── Hero Section ─────────────────────────────────────────────────── */}
       <section className="relative min-h-[88vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 sm:pt-28 pb-12">
-        {/* Ambient Glows */}
+        {/* Ambient Glows — static on mobile, animated on desktop */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0.45, 0.25] }}
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-32 -left-32 w-80 sm:w-[480px] h-80 sm:h-[480px] rounded-full blur-[110px] bg-indigo-600/30"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.25, 1], opacity: [0.2, 0.35, 0.2] }}
-            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-            className="absolute -bottom-32 -right-32 w-80 sm:w-[480px] h-80 sm:h-[480px] rounded-full blur-[120px] bg-violet-600/25"
-          />
-          <motion.div
-            animate={{ x: [-20, 20, -20], y: [-15, 15, -15] }}
-            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-64 sm:w-96 h-64 sm:h-96 rounded-full blur-[100px] bg-purple-600/20"
-          />
+          {/* Static mobile fallbacks rendered via CSS, animated only on md+ */}
+          <div className="absolute -top-32 -left-32 w-64 sm:w-[420px] h-64 sm:h-[420px] rounded-full blur-[70px] sm:blur-[100px] bg-indigo-600/25 hidden sm:block" />
+          <div className="absolute -bottom-32 -right-32 w-64 sm:w-[420px] h-64 sm:h-[420px] rounded-full blur-[70px] sm:blur-[100px] bg-violet-600/20 hidden sm:block" />
+          {/* Mobile-only: simple static glow, no animation */}
+          <div className="absolute inset-0 sm:hidden" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 20%, rgba(99,102,241,0.18) 0%, transparent 70%)" }} />
         </div>
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center z-10">
@@ -225,7 +215,8 @@ export default function HomePage() {
         >
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mb-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 hidden sm:inline-block animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 sm:hidden" />
               <span>Live Campus Feed</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Fresh Listings</h2>

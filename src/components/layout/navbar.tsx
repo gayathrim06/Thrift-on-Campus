@@ -39,7 +39,7 @@ export default function Navbar() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-[#090a10]/90 via-[#090a10]/40 to-transparent backdrop-blur-md transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50 gpu-layer bg-gradient-to-b from-[#090a10]/90 via-[#090a10]/40 to-transparent backdrop-blur-md transition-all duration-300"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-18">
@@ -145,7 +145,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 8, scale: 0.95 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute right-0 top-full mt-2 w-52 glass-strong rounded-2xl py-2 shadow-2xl border border-white/15 z-50 backdrop-blur-2xl"
+                        className="absolute right-0 top-full mt-2 w-52 glass-strong rounded-2xl py-2 shadow-2xl border border-white/15 z-50"
                         onMouseLeave={() => setProfileOpen(false)}
                       >
                         <div className="px-4 py-2 border-b border-white/8">
@@ -204,12 +204,13 @@ export default function Navbar() {
       </motion.nav>
 
       {/* ── Native-Style Floating Mobile Bottom Bar (Phones) ──────────────── */}
-      <div className="fixed bottom-3 left-0 right-0 z-50 md:hidden flex justify-center px-4 safe-area-bottom pointer-events-none">
+      <div className="fixed bottom-3 left-0 right-0 z-50 md:hidden flex justify-center px-4 safe-area-bottom pointer-events-none gpu-layer">
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 320, damping: 26, delay: 0.1 }}
-          className="pointer-events-auto w-full max-w-md glass-strong border border-white/12 rounded-full px-3 py-2 shadow-2xl shadow-black/80 flex items-center justify-between backdrop-blur-2xl"
+          className="pointer-events-auto w-full max-w-md glass-strong border border-white/12 rounded-full px-3 py-2 shadow-2xl shadow-black/80 flex items-center justify-between"
+          style={{ willChange: 'transform' }}
         >
           {/* Home */}
           <Link
