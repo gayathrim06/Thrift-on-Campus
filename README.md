@@ -4,6 +4,8 @@
 
 A modern, full-stack campus marketplace where college students buy and sell pre-owned gear, textbooks, hostel essentials, and electronics.
 
+🌐 **Live Demo Website:** [https://thrift-in-campus.onrender.com](https://thrift-in-campus.onrender.com)
+
 ---
 
 ## 🚀 Quick Start (For Anyone Downloading from GitHub)
@@ -13,7 +15,7 @@ A modern, full-stack campus marketplace where college students buy and sell pre-
 
 ### 1. Clone & Install
 ```bash
-git clone <YOUR-GITHUB-REPO-URL>
+git clone https://github.com/gayathrim06/Thrift-on-Campus.git
 cd thrift-in-campus
 npm install
 ```
@@ -76,3 +78,18 @@ Open [http://localhost:3000](http://localhost:3000) in your browser!
 - **Animations**: Framer Motion + Canvas Confetti
 - **Database**: SQLite with Prisma ORM (zero external db installation required)
 - **Authentication**: NextAuth.js (Credentials Provider + bcrypt)
+
+---
+
+## 🌐 Deploy to Render
+
+This repository includes a [`render.yaml`](render.yaml) blueprint for 1-click deployment on Render:
+
+1. Connect your GitHub repository to [Render](https://render.com).
+2. Choose **Blueprint** and select this repo.
+3. Render automatically sets up:
+   - Build Command: `npm install && npx prisma db push && npm run db:seed && npm run build`
+   - Start Command: `npm start`
+   - `AUTH_TRUST_HOST: "true"`
+   - `AUTH_SECRET`: auto-generated
+4. Your marketplace is live with seeded demo data ready to test!
